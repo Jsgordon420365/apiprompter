@@ -19,11 +19,48 @@
         </nav>
     </header>
     <main>
-        <h1>[Page Name]</h1>
-        <!-- Page-specific content goes here -->
+        <h1>Manage API Keys</h1>
+        <form id="apiKeyForm">
+            <label for="service">AI Service:</label>
+            <select id="service" name="service">
+                <option value="openai">OpenAI</option>
+                <option value="anthropic">Anthropic</option>
+                <option value="google">Google AI</option>
+            </select>
+            <label for="apiKey">API Key:</label>
+            <input type="password" id="apiKey" name="apiKey" required>
+            <button type="submit">Save API Key</button>
+        </form>
+        <div id="savedKeys">
+            <h2>Saved API Keys</h2>
+            <ul id="keyList"></ul>
+        </div>
     </main>
     <footer>
         <p>&copy; 2024 AI API Manager</p>
     </footer>
+    <script>
+        document.getElementById('apiKeyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var service = document.getElementById('service').value;
+            var apiKey = document.getElementById('apiKey').value;
+            localStorage.setItem(service, apiKey);
+            updateKeyList();
+            document.getElementById('apiKey').value = '';
+        });
+        
+        function updateKeyList() {
+            var keyList = document.getElementById('keyList');
+            keyList.innerHTML = '';
+            for (var i = 0; i < localStorage.length; i++) {
+                var service = localStorage.key(i);
+                var li = document.createElement('li');
+                li.textContent = service + ': ' + '*'.repeat(8);
+                keyList.appendChild(li);
+            }
+        }
+        
+        updateKeyList();
+    </script>
 </body>
 </html>
